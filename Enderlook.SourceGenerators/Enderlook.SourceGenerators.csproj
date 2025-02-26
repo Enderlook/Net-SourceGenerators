@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net5;net6;net7;net8;net9</TargetFrameworks>
+		<PackageId>Enderlook.SourceGenerators</PackageId>
+		<AssemblyName>Enderlook.SourceGenerators</AssemblyName>
+		<RootNamespace>Enderlook.SourceGenerators</RootNamespace>
+		<Authors>Enderlook</Authors>
+		<Product>Enderlook.SourceGenerators</Product>
+		<RepositoryUrl>https://github.com/Enderlook/Net-SourceGenerators</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Version>0.1.0</Version>
+		<OutputType>Library</OutputType>
+		<LangVersion>13</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<PublishTrimmed>true</PublishTrimmed>
+		<IsTrimmable>true</IsTrimmable>
+		<TrimmerDefaultAction>link</TrimmerDefaultAction>
+		<TrimMode>full</TrimMode>
+		<SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+		<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+		<EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+		<EnableAotAnalyzer>true</EnableAotAnalyzer>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard2.1'">
+		<PackageReference Include="System.Memory" Version="4.5.4" />
+	</ItemGroup>
+
+</Project>
