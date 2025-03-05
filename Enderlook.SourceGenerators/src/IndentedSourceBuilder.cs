@@ -92,6 +92,7 @@ public sealed class IndentedSourceBuilder
         if (value is null)
             goto end;
 
+        // By adding the if/else with these check, we hint the jitter that it can optimize the method using constant propagation.
         if (typeof(T).IsValueType)
         {
             if (typeof(T).IsPrimitive)
@@ -158,8 +159,6 @@ public sealed class IndentedSourceBuilder
                             EnsureIndentation().Append(Unsafe.As<T, ulong>(ref value));
                         else if (typeof(T) == typeof(long))
                             EnsureIndentation().Append(Unsafe.As<T, long>(ref value));
-                        else if (typeof(T) == typeof(decimal))
-                            EnsureIndentation().Append(Unsafe.As<T, decimal>(ref value));
                         else
                         {
                             Debug.Fail("Primitive not recognized.");
