@@ -702,6 +702,97 @@ public sealed class IndentedSourceBuilder
         return this;
     }
 
+    /// <summary>
+    /// Concatenates the <see cref="string"/> representation of the elements in a provided collection, usin the <see cref="string"/> representation of the specified separator between each element, then append the result to the current instance.
+    /// </summary>
+    /// <typeparam name="TSeparator">Type of value whose <see cref="string"/> representation will be appended as separator.</typeparam>
+    /// <typeparam name="TValue">Type of value whose <see cref="string"/> representation will be appended as value.</typeparam>
+    /// <param name="separator">The object whose <see cref="string"/> representation will be used as a separator. <paramref name="separator"/> is included in the joined strings only if <paramref name="values"/> has more than one element.</param>
+    /// <param name="values">A collection that contains the objects whose <see cref="string"/> represetation will be concatenated and appended to the current instance.</param>
+    /// <param name="separatorMode">Determines how the separator is appended.</param>
+    /// <param name="valuesMode">Determines how each element in the values are appended.</param>
+    /// <returns>A reference to this instance after the append operation has completed.</returns>
+    public IndentedSourceBuilder AppendJoin<TSeparator, TValue>(TSeparator? separator, ReadOnlySpan<TValue?> values, AppendMode separatorMode = AppendMode.Continuous, AppendMode valuesMode = AppendMode.Continuous)
+    {
+        if (!EndNewline(separatorMode) && (separator is null || (separator is string separator_ && string.IsNullOrEmpty(separator_))))
+        {
+            foreach (TValue? value in values)
+            {
+                Append(value, valuesMode);
+            }
+        }
+        else
+        {
+            ReadOnlySpan<TValue?>.Enumerator enumerator = values.GetEnumerator();
+            if (enumerator.MoveNext())
+            {
+            again:
+                Append(enumerator.Current, valuesMode);
+                if (enumerator.MoveNext())
+                {
+                    Append(separator, separatorMode);
+                    goto again;
+                }
+            }
+        }
+        return this;
+    }
+
+    /// <summary>
+    /// Concatenates the <see cref="string"/> representation of the elements in a provided collection, usin the <see cref="string"/> representation of the specified separator between each element, then append the result to the current instance.
+    /// </summary>
+    /// <typeparam name="TSeparator">Type of value whose <see cref="string"/> representation will be appended as separator.</typeparam>
+    /// <typeparam name="TValue">Type of value whose <see cref="string"/> representation will be appended as value.</typeparam>
+    /// <param name="separator">The object whose <see cref="string"/> representation will be used as a separator. <paramref name="separator"/> is included in the joined strings only if <paramref name="values"/> has more than one element.</param>
+    /// <param name="values">A collection that contains the objects whose <see cref="string"/> represetation will be concatenated and appended to the current instance.</param>
+    /// <param name="separatorMode">Determines how the separator is appended.</param>
+    /// <param name="valuesMode">Determines how each element in the values are appended.</param>
+    /// <returns>A reference to this instance after the append operation has completed.</returns>
+    public IndentedSourceBuilder AppendJoin<TSeparator, TValue>(TSeparator? separator, ReadOnlySequence<TValue?> values, AppendMode separatorMode = AppendMode.Continuous, AppendMode valuesMode = AppendMode.Continuous)
+    {
+        if (!EndNewline(separatorMode) && (separator is null || (separator is string separator_ && string.IsNullOrEmpty(separator_))))
+        {
+            SequencePosition current = values.Start;
+            while (values.TryGet(ref current, out ReadOnlyMemory<TValue?> memory))
+            {
+                foreach (TValue? value in memory.Span)
+                {
+                    Append(value, valuesMode);
+                }
+            }
+        }
+        else
+        {
+            SequencePosition current = values.Start;
+        again:
+            if (values.TryGet(ref current, out ReadOnlyMemory<TValue?> memory))
+            {
+                ReadOnlySpan<TValue?>.Enumerator enumerator = memory.Span.GetEnumerator();
+                if (!enumerator.MoveNext())
+                {
+                    goto again;
+                }
+
+            again2:
+                Append(enumerator.Current, valuesMode);
+
+                if (enumerator.MoveNext())
+                {
+                    Append(separator, separatorMode);
+                    goto again2;
+                }
+
+                goto again;
+            }
+            else
+            {
+                goto return_;
+            }
+        }
+    return_:
+        return this;
+    }
+
 #if NET8_0_OR_GREATER
     /// <summary>
     /// Appends the <see cref="string"/> returned by processing a composite format <see cref="string"/>, which contains zero or more format items, to this instance. Each format item is replaced by the <see cref="string"/> representation of any of the arguments using a specified format provider.
