@@ -1174,14 +1174,14 @@ public sealed class IndentedSourceBuilder
     /// Returns a value indicating whether this instance is equal to a specified object.
     /// </summary>
     /// <param name="sb">An object to compare with this instance, or null.</param>
-    /// <returns><see langword="true"/> if this instance and <paramref name="sb"/> have equal <see cref="string"/>, <see cref="Capacity"/>, and <see cref="MaxCapacity"/> values; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if this instance and <paramref name="sb"/> have equal <see cref="string"/> and <see cref="Capacity"/> values; otherwise, <see langword="false"/>.</returns>
     public bool Equals(StringBuilder sb) => builder.Equals(sb);
 
     /// <summary>
     /// Returns a value indicating whether this instance is equal to a specified object.
     /// </summary>
     /// <param name="sb">An object to compare with this instance, or null.</param>
-    /// <returns><see langword="true"/> if this instance and <paramref name="sb"/> have equal <see cref="string"/>, <see cref="Capacity"/>, and <see cref="MaxCapacity"/> values; otherwise, <see langword="false"/>.</returns>
+    /// <returns><see langword="true"/> if this instance and <paramref name="sb"/> have equal <see cref="string"/> and <see cref="Capacity"/> values; otherwise, <see langword="false"/>.</returns>
     public bool Equals(IndentedSourceBuilder sb) => builder.Equals(sb.builder);
 
     /// <summary>
